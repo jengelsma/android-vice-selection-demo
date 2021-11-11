@@ -12,16 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ViceSelectionActivity : AppCompatActivity() {
 
-    private var selection = "Steak"
+    private var selection: String?  = "Steak"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vice_selection)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        if (intent.hasExtra("vice")) {
+            selection = intent.getStringExtra("vice")
+        }
+
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
             val intent = Intent()
             intent.putExtra("vice", selection)
             setResult(RESULT_OK, intent)
@@ -37,6 +39,9 @@ class ViceSelectionActivity : AppCompatActivity() {
         )
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
         spinner.adapter = adapter
+
+        val pos = adapter.getPosition(selection)
+        spinner.setSelection(pos)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View?, i: Int, l: Long) {
